@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <!-- ================= تنظیمات پایه ================= -->
+    <meta charset="UTF-8" />
+    <title>Code Typing Trainer — Final</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Tailwind CDN (فقط برای ریسپانسیو و لایه‌بندی) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- اتصال فایل استایل -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="min-h-screen flex flex-col">
+
+    <!-- ================= هدر ================= -->
+    <header
+      class="
+        header
+        flex flex-col gap-4
+        md:flex-row md:items-center md:justify-between
+        text-center md:text-right
+      "
+    >
+      <!-- عنوان اصلی -->
+      <div class="logo flex items-center justify-center md:justify-start gap-2">
+        <span>🧠</span>
+        <h1>Code Typing Trainer</h1>
+      </div>
+
+      <!-- انتخاب زبان تمرین -->
+      <select
+        id="languageSelect"
+        class="w-full md:w-40 mx-auto md:mx-0"
+      >
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+        <option value="js">JavaScript</option>
+      </select>
+
+      <!-- وضعیت کاربر -->
+      <div
+        class="
+          user-progress
+          flex gap-4
+          justify-center md:justify-end
+          text-sm
+        "
+      >
+        <span id="level">Level 1</span>
+        <span id="xp">XP 0</span>
+      </div>
+    </header>
+
+    <!-- ================= محتوای اصلی ================= -->
+    <main
+      class="
+        main
+        flex-1
+        grid
+        grid-cols-1
+        gap-6
+        px-4
+        md:grid-cols-3
+        md:px-8
+      "
+    >
+      <!-- پنل کد مرجع -->
+      <section class="card">
+        <h2>📄 کد مرجع</h2>
+        <pre id="referenceCode"></pre>
+
+        <div class="code-description">
+          <h3>📝 توضیح کد</h3>
+          <p id="codeDescription"></p>
+        </div>
+      </section>
+
+      <!-- پنل تایپ (اولویت موبایل) -->
+      <section class="card order-2 md:order-none">
+        <h2>⌨️ تایپ کن</h2>
+
+        <input
+          id="typingInput"
+          type="text"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="شروع به تایپ کن..."
+          class="w-full"
+        />
+
+        <div
+          class="
+            stats
+            flex
+            justify-between
+            text-xs
+            mt-3
+          "
+        >
+          <span id="time">⏱ 0s</span>
+          <span id="accuracy">🎯 0%</span>
+          <span id="speed">⚡ 0 CPM</span>
+        </div>
+
+        <div
+          class="
+            actions
+            flex gap-3
+            mt-4
+          "
+        >
+          <button id="hintBtn" class="flex-1">Hint</button>
+          <button id="newCodeBtn" class="flex-1">کد جدید</button>
+        </div>
+      </section>
+
+      <!-- پنل تحلیل -->
+      <section class="card hidden md:block">
+        <h2>🤖 AI Coach</h2>
+        <ul id="analysisList"></ul>
+      </section>
+    </main>
+
+    <!-- پیام مربی -->
+    <div id="coachMessage" class="hidden md:block">
+      🤖 تمرکز کن، شروع کن!
+    </div>
+
+    <!-- اتصال فایل اسکریپت -->
+    <script src="script.js"></script>
+  </body>
+</html>

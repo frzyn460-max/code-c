@@ -1,0 +1,330 @@
+/* =====================================================
+   Code Typing Trainer
+   PREMIUM • MINIMAL • PROFESSIONAL UI
+===================================================== */
+
+/* ================= فونت و ریست ================= */
+* {
+  box-sizing: border-box;
+  font-family: tanha;
+}
+
+/* ================= متغیرها ================= */
+:root {
+  --bg-main: #020617;
+  --bg-glass: rgba(8, 15, 35, 0.75);
+
+  --border-soft: rgba(255, 255, 255, 0.08);
+
+  --primary: #4cc9f0;
+  --primary-soft: rgba(76, 201, 240, 0.35);
+
+  --success: #4ade80;
+  --danger: #f87171;
+
+  --text-main: #e5e7eb;
+  --text-muted: #9ca3af;
+}
+
+/* ================= بدنه ================= */
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(76, 201, 240, 0.12),
+      transparent 45%
+    ),
+    linear-gradient(180deg, #020617, #000);
+
+  color: var(--text-main);
+}
+
+/* ================= هدر (بزرگ‌تر و لوکس) ================= */
+.header {
+  padding: 32px 40px;
+  text-align: center;
+
+  background: rgba(2, 6, 23, 0.75);
+  backdrop-filter: blur(18px);
+
+  border-bottom: 1px solid var(--border-soft);
+}
+
+/* عنوان */
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo span {
+  font-size: 30px;
+  filter: drop-shadow(0 0 12px var(--primary));
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+/* نوار کنترل زیر عنوان */
+.header select,
+.header .user-progress {
+  margin-top: 16px;
+}
+
+/* ================= مین (مرکز کامل صفحه) ================= */
+.main {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* کانتینر کارت‌ها */
+.main > * {
+  width: 100%;
+}
+
+/* گرید سه‌تایی وسط */
+.main {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(280px, 340px));
+  gap: 28px;
+  padding: 40px;
+  justify-content: center;
+  align-content: center;
+}
+
+/* ================= کارت‌ها (پریمیوم) ================= */
+.card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+
+  border-radius: 26px;
+  padding: 22px 24px;
+
+  border: 1px solid var(--border-soft);
+
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
+}
+
+/* هاور ظریف و شیک */
+.card:hover {
+  transform: translateY(-10px);
+  border-color: var(--primary-soft);
+
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(76, 201, 240, 0.15);
+}
+
+/* عنوان کارت */
+.card h2 {
+  margin: 0 0 14px 0;
+  font-size: 14px;
+  letter-spacing: 0.8px;
+  font-weight: 500;
+  color: var(--primary);
+}
+
+/* ================= کد مرجع ================= */
+#referenceCode {
+  font-size: 14px;
+  line-height: 1.9;
+  user-select: none;
+  word-break: break-all;
+}
+
+/* کاراکترها */
+.char {
+  padding: 1px 0;
+}
+
+.correct {
+  color: var(--success);
+}
+
+.wrong {
+  color: var(--danger);
+}
+
+.active {
+  position: relative;
+}
+
+.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 2px;
+
+  background: linear-gradient(
+    90deg,
+    var(--primary),
+    transparent
+  );
+
+  animation: blink 1s infinite;
+}
+
+/* ================= توضیح کد ================= */
+.code-description {
+  margin-top: 16px;
+  padding: 14px 16px;
+
+  border-radius: 16px;
+  border: 1px dashed var(--border-soft);
+
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.code-description h3 {
+  margin: 0 0 6px 0;
+  font-size: 12px;
+  color: var(--primary);
+}
+
+.code-description p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+/* ================= ورودی تایپ ================= */
+#typingInput {
+  width: 100%;
+  padding: 18px;
+
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 18px;
+
+  border: 1px solid var(--border-soft);
+  color: #fff;
+
+  font-size: 15px;
+  letter-spacing: 0.6px;
+
+  transition: all 0.35s ease;
+}
+
+/* فوکوس حرفه‌ای */
+#typingInput:focus {
+  outline: none;
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 2px rgba(76, 201, 240, 0.25),
+    0 0 30px rgba(76, 201, 240, 0.35);
+}
+
+/* ================= آمار ================= */
+.stats {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ================= دکمه و سِلکت ================= */
+button,
+select {
+  margin-top: 14px;
+
+  width: 100%;
+  padding: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      #4895ef
+    );
+
+  border: none;
+  border-radius: 18px;
+
+  font-weight: 600;
+  cursor: pointer;
+
+  color: #000;
+
+  transition: all 0.35s ease;
+}
+
+/* هاور */
+button:hover,
+select:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 15px 35px rgba(76, 201, 240, 0.45);
+}
+
+/* ================= مربی ================= */
+#coachMessage {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+
+  border: 1px solid var(--border-soft);
+  border-radius: 22px;
+
+  padding: 16px 18px;
+  max-width: 300px;
+
+  font-size: 13px;
+  color: var(--primary);
+
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+/* ================= انیمیشن‌ها ================= */
+@keyframes blink {
+  50% { opacity: 0.35; }
+}
+
+/* ================= Tailwind Compatibility ================= */
+
+/* جلوگیری از شکستن گرید در موبایل */
+.main {
+  width: 100%;
+}
+
+/* ورودی تایپ در موبایل */
+#typingInput {
+  font-size: 16px; /* جلوگیری از زوم خودکار موبایل */
+}
+
+/* دکمه‌ها در موبایل */
+.actions button {
+  min-height: 44px; /* استاندارد لمس */
+}
+
+/* کارت‌ها وسط در موبایل */
+@media (max-width: 768px) {
+  .card {
+    margin-inline: auto;
+    max-width: 420px;
+  }
+}
