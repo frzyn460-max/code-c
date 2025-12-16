@@ -1,135 +1,478 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
   <head>
-    <!-- ================= تنظیمات پایه ================= -->
+    <!-- ================= تنظیمات پایه و امنیتی ================= -->
     <meta charset="UTF-8" />
-    <title>Code Typing Trainer — Final</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Tailwind CDN (فقط برای ریسپانسیو و لایه‌بندی) -->
+    <!-- امنیت: جلوگیری از بارگذاری اسکریپت‌های خارجی -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; font-src 'self' data:;"
+    />
+
+    <!-- SEO و توضیحات -->
+    <meta
+      name="description"
+      content="تمرین تایپ کد حرفه‌ای با تحلیل هوش مصنوعی"
+    />
+    <meta
+      name="keywords"
+      content="تایپ کد, برنامه‌نویسی, تمرین, HTML, CSS, JavaScript"
+    />
+    <meta name="author" content="Code Typing Trainer" />
+
+    <!-- عنوان صفحه -->
+    <title>Code Typing Trainer Ultimate — تمرین تایپ حرفه‌ای</title>
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- اتصال فایل استایل -->
+    <!-- تنظیمات Tailwind سفارشی -->
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#06b6d4",
+              secondary: "#8b5cf6",
+              accent: "#f59e0b",
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- لینک به فایل استایل -->
     <link rel="stylesheet" href="style.css" />
+
+    <!-- Favicon (اختیاری) -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>"
+    />
   </head>
 
-  <body class="min-h-screen flex flex-col">
+  <body class="min-h-screen transition-colors duration-300">
+    <!-- ================= هدر اصلی با کنترل‌ها ================= -->
+    <header class="header-main">
+      <div class="header-container">
+        <!-- بخش راست: لوگو و عنوان -->
+        <div class="header-left">
+          <div class="logo-wrapper">
+            <span class="logo-icon" role="img" aria-label="brain">🧠</span>
+            <div>
+              <h1 class="logo-title">Code Typing Trainer</h1>
+              <p class="logo-subtitle">تمرین تایپ حرفه‌ای</p>
+            </div>
+          </div>
+        </div>
 
-    <!-- ================= هدر ================= -->
-    <header
-      class="
-        header
-        flex flex-col gap-4
-        md:flex-row md:items-center md:justify-between
-        text-center md:text-right
-      "
-    >
-      <!-- عنوان اصلی -->
-      <div class="logo flex items-center justify-center md:justify-start gap-2">
-        <span>🧠</span>
-        <h1>Code Typing Trainer</h1>
-      </div>
+        <!-- بخش وسط: کنترل‌های اصلی -->
+        <div class="header-center">
+          <!-- انتخاب زبان برنامه‌نویسی -->
+          <div class="control-group">
+            <label for="languageSelect" class="control-label">
+              <span>📝</span>
+              <span>زبان:</span>
+            </label>
+            <select
+              id="languageSelect"
+              class="select-modern"
+              aria-label="انتخاب زبان برنامه‌نویسی"
+            >
+              <option value="html">HTML</option>
+              <option value="css">CSS</option>
+              <option value="js">JavaScript</option>
+              <option value="react">React</option>
+              <option value="python">Python</option>
+              <option value="php">PHP</option>
+            </select>
+          </div>
 
-      <!-- انتخاب زبان تمرین -->
-      <select
-        id="languageSelect"
-        class="w-full md:w-40 mx-auto md:mx-0"
-      >
-        <option value="html">HTML</option>
-        <option value="css">CSS</option>
-        <option value="js">JavaScript</option>
-      </select>
+          <!-- انتخاب سطح دشواری -->
+          <div class="control-group">
+            <label for="difficultySelect" class="control-label">
+              <span>🎯</span>
+              <span>سطح:</span>
+            </label>
+            <select
+              id="difficultySelect"
+              class="select-modern"
+              aria-label="انتخاب سطح دشواری"
+            >
+              <option value="easy">آسان</option>
+              <option value="medium" selected>متوسط</option>
+              <option value="hard">سخت</option>
+            </select>
+          </div>
+        </div>
 
-      <!-- وضعیت کاربر -->
-      <div
-        class="
-          user-progress
-          flex gap-4
-          justify-center md:justify-end
-          text-sm
-        "
-      >
-        <span id="level">Level 1</span>
-        <span id="xp">XP 0</span>
+        <!-- بخش چپ: تنظیمات و پروفایل -->
+        <div class="header-right">
+          <!-- دکمه تغییر تم -->
+          <button
+            id="themeToggle"
+            class="btn-icon"
+            aria-label="تغییر تم"
+            title="تغییر تم (Ctrl+T)"
+          >
+            <span class="theme-icon-light">🌙</span>
+            <span class="theme-icon-dark">☀️</span>
+          </button>
+
+          <!-- دکمه تنظیمات -->
+          <button
+            id="settingsBtn"
+            class="btn-icon"
+            aria-label="تنظیمات"
+            title="تنظیمات"
+          >
+            <span>⚙️</span>
+          </button>
+
+          <!-- نمایشگر پروفایل کاربر -->
+          <div class="user-profile">
+            <div class="user-avatar">
+              <span id="userLevel">1</span>
+            </div>
+            <div class="user-info">
+              <span class="user-xp" id="userXP">0 XP</span>
+              <div class="xp-bar-container">
+                <div class="xp-bar-fill" id="xpBar" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
     <!-- ================= محتوای اصلی ================= -->
-    <main
-      class="
-        main
-        flex-1
-        grid
-        grid-cols-1
-        gap-6
-        px-4
-        md:grid-cols-3
-        md:px-8
-      "
-    >
-      <!-- پنل کد مرجع -->
-      <section class="card">
-        <h2>📄 کد مرجع</h2>
-        <pre id="referenceCode"></pre>
+    <main class="main-content">
+      <!-- ================= پنل کد مرجع ================= -->
+      <section class="card card-reference" id="referenceCard">
+        <!-- هدر کارت -->
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>📄</span>
+            <span>کد مرجع</span>
+          </h2>
+          <div class="card-actions">
+            <!-- دکمه کپی کد -->
+            <button
+              id="copyCodeBtn"
+              class="btn-icon-small"
+              aria-label="کپی کد"
+              title="کپی کد"
+            >
+              <span>📋</span>
+            </button>
+          </div>
+        </div>
 
+        <!-- محتوای کد -->
+        <div class="code-container">
+          <pre id="referenceCode" class="code-display" aria-live="polite"></pre>
+        </div>
+
+        <!-- توضیحات کد -->
         <div class="code-description">
-          <h3>📝 توضیح کد</h3>
-          <p id="codeDescription"></p>
+          <div class="description-header">
+            <span class="description-icon">💡</span>
+            <h3 class="description-title">توضیح کد</h3>
+          </div>
+          <p id="codeDescription" class="description-text"></p>
+        </div>
+
+        <!-- آمار کد -->
+        <div class="code-stats">
+          <div class="stat-badge">
+            <span class="stat-icon">📏</span>
+            <span>طول: <strong id="codeLength">0</strong> کاراکتر</span>
+          </div>
+          <div class="stat-badge">
+            <span class="stat-icon">⏱️</span>
+            <span>زمان تخمینی: <strong id="estimatedTime">0</strong>s</span>
+          </div>
         </div>
       </section>
 
-      <!-- پنل تایپ (اولویت موبایل) -->
-      <section class="card order-2 md:order-none">
-        <h2>⌨️ تایپ کن</h2>
-
-        <input
-          id="typingInput"
-          type="text"
-          autocomplete="off"
-          spellcheck="false"
-          placeholder="شروع به تایپ کن..."
-          class="w-full"
-        />
-
-        <div
-          class="
-            stats
-            flex
-            justify-between
-            text-xs
-            mt-3
-          "
-        >
-          <span id="time">⏱ 0s</span>
-          <span id="accuracy">🎯 0%</span>
-          <span id="speed">⚡ 0 CPM</span>
+      <!-- ================= پنل تایپ ================= -->
+      <section class="card card-typing" id="typingCard">
+        <!-- هدر کارت -->
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>⌨️</span>
+            <span>محل تایپ</span>
+          </h2>
+          <div class="card-actions">
+            <!-- نمایشگر وضعیت -->
+            <span class="status-badge" id="statusBadge">آماده</span>
+          </div>
         </div>
 
-        <div
-          class="
-            actions
-            flex gap-3
-            mt-4
-          "
-        >
-          <button id="hintBtn" class="flex-1">Hint</button>
-          <button id="newCodeBtn" class="flex-1">کد جدید</button>
+        <!-- ورودی تایپ -->
+        <div class="typing-input-wrapper">
+          <textarea
+            id="typingInput"
+            class="typing-input"
+            placeholder="اینجا شروع به تایپ کن... (Enter برای شروع)"
+            spellcheck="false"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            aria-label="ورودی تایپ"
+          ></textarea>
+
+          <!-- نمایشگر پیشرفت -->
+          <div class="progress-overlay" id="progressOverlay">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+        </div>
+
+        <!-- آمار لحظه‌ای -->
+        <div class="stats-grid">
+          <div class="stat-card stat-time">
+            <div class="stat-icon-wrapper">
+              <span>⏱️</span>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">زمان</span>
+              <span class="stat-value" id="timeValue">0s</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-accuracy">
+            <div class="stat-icon-wrapper">
+              <span>🎯</span>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">دقت</span>
+              <span class="stat-value" id="accuracyValue">100%</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-speed">
+            <div class="stat-icon-wrapper">
+              <span>⚡</span>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">سرعت</span>
+              <span class="stat-value" id="speedValue">0 CPM</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-errors">
+            <div class="stat-icon-wrapper">
+              <span>❌</span>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">خطاها</span>
+              <span class="stat-value" id="errorsValue">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- دکمه‌های عملیاتی -->
+        <div class="action-buttons">
+          <button id="newCodeBtn" class="btn btn-primary">
+            <span>🔄</span>
+            <span>کد جدید</span>
+          </button>
+          <button id="hintBtn" class="btn btn-secondary">
+            <span>💡</span>
+            <span>راهنما</span>
+          </button>
+          <button id="resetBtn" class="btn btn-outline">
+            <span>↺</span>
+            <span>شروع مجدد</span>
+          </button>
         </div>
       </section>
 
-      <!-- پنل تحلیل -->
-      <section class="card hidden md:block">
-        <h2>🤖 AI Coach</h2>
-        <ul id="analysisList"></ul>
+      <!-- ================= پنل تحلیل و AI Coach ================= -->
+      <section class="card card-analysis" id="analysisCard">
+        <!-- هدر کارت -->
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>🤖</span>
+            <span>AI Coach</span>
+          </h2>
+          <div class="card-actions">
+            <span class="ai-status">آنلاین</span>
+          </div>
+        </div>
+
+        <!-- پیام مربی -->
+        <div class="coach-message" id="coachMessage">
+          <div class="coach-avatar">🤖</div>
+          <div class="coach-text">
+            <p>سلام! آماده‌ای سرعت تایپ کدنویسیت رو بهبود بدی؟</p>
+          </div>
+        </div>
+
+        <!-- تحلیل خطاها -->
+        <div class="analysis-section">
+          <h3 class="analysis-title">
+            <span>📊</span>
+            <span>تحلیل خطاها</span>
+          </h3>
+          <ul id="analysisList" class="analysis-list">
+            <li class="analysis-item analysis-empty">
+              <span>در حال انتظار برای شروع تمرین...</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- پیشنهادات -->
+        <div class="suggestions-section">
+          <h3 class="suggestions-title">
+            <span>💡</span>
+            <span>پیشنهادات</span>
+          </h3>
+          <div id="suggestionsList" class="suggestions-list">
+            <div class="suggestion-item">
+              <span class="suggestion-icon">✨</span>
+              <p>روی دقت تمرکز کن، سرعت به تدریج افزایش پیدا می‌کنه</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- نمودار پیشرفت -->
+        <div class="progress-chart">
+          <h3 class="chart-title">
+            <span>📈</span>
+            <span>آمار کلی</span>
+          </h3>
+          <div class="chart-stats">
+            <div class="chart-stat">
+              <span class="chart-label">تمرین‌ها:</span>
+              <span class="chart-value" id="totalSessions">0</span>
+            </div>
+            <div class="chart-stat">
+              <span class="chart-label">میانگین دقت:</span>
+              <span class="chart-value" id="avgAccuracy">0%</span>
+            </div>
+            <div class="chart-stat">
+              <span class="chart-label">بهترین سرعت:</span>
+              <span class="chart-value" id="bestSpeed">0 CPM</span>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
 
-    <!-- پیام مربی -->
-    <div id="coachMessage" class="hidden md:block">
-      🤖 تمرکز کن، شروع کن!
+    <!-- ================= مودال تنظیمات ================= -->
+    <div
+      id="settingsModal"
+      class="modal"
+      role="dialog"
+      aria-labelledby="settingsModalTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-overlay" id="modalOverlay"></div>
+      <div class="modal-content">
+        <!-- هدر مودال -->
+        <div class="modal-header">
+          <h2 id="settingsModalTitle" class="modal-title">
+            <span>⚙️</span>
+            <span>تنظیمات</span>
+          </h2>
+          <button id="closeModalBtn" class="btn-close" aria-label="بستن">
+            ✕
+          </button>
+        </div>
+
+        <!-- بدنه مودال -->
+        <div class="modal-body">
+          <!-- تنظیمات صدا -->
+          <div class="setting-group">
+            <label class="setting-label">
+              <span class="setting-icon">🔊</span>
+              <span>صداها</span>
+            </label>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="soundToggle" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- تنظیمات کیبورد ویژوال -->
+          <div class="setting-group">
+            <label class="setting-label">
+              <span class="setting-icon">⌨️</span>
+              <span>نمایش کیبورد</span>
+            </label>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="keyboardToggle" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- تنظیمات Backspace -->
+          <div class="setting-group">
+            <label class="setting-label">
+              <span class="setting-icon">⌫</span>
+              <span>مجوز Backspace</span>
+            </label>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="backspaceToggle" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- تنظیمات فونت -->
+          <div class="setting-group">
+            <label class="setting-label">
+              <span class="setting-icon">🔤</span>
+              <span>سایز فونت</span>
+            </label>
+            <div class="setting-control">
+              <select id="fontSizeSelect" class="select-modern">
+                <option value="small">کوچک</option>
+                <option value="medium" selected>متوسط</option>
+                <option value="large">بزرگ</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ریست داده‌ها -->
+          <div class="setting-group">
+            <label class="setting-label">
+              <span class="setting-icon">🗑️</span>
+              <span>ریست کامل داده‌ها</span>
+            </label>
+            <div class="setting-control">
+              <button id="resetDataBtn" class="btn btn-danger-outline">
+                <span>حذف همه</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- فوتر مودال -->
+        <div class="modal-footer">
+          <p class="modal-footer-text">ساخته شده با ❤️ برای برنامه‌نویسان</p>
+        </div>
+      </div>
     </div>
 
-    <!-- اتصال فایل اسکریپت -->
+    <!-- ================= توست نوتیفیکیشن ================= -->
+    <div
+      id="toastContainer"
+      class="toast-container"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    <!-- ================= لینک به فایل اسکریپت ================= -->
     <script src="script.js"></script>
   </body>
 </html>
